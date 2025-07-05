@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSPD Business Card Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./images/lspd logo.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-info">
+            <span class="version-info">v1.5</span>
+        </div>
+        <h1>LSPD Business Card Generator</h1>
+        <p>By coopik43</p>
+        <p>Inspired by PHMC's Business Card Tool</p>
+        <p>IF THE SITE ISN'T LOADING PROPERLY, HIT CTRL+SHIFT+R TO FULLY REFRESH!</p>
+
+        <div id="result-container"></div>
+        <canvas id="card-canvas" width="500" height="300"></canvas>
+
+        <div class="form-controls">
+            <div class="form-group" data-field="phone">
+                <input type="number" id="phone-input" placeholder="Phone Number" required>
+            </div>
+            <div class="form-group" data-field="division">
+                <select id="division-select">
+                    <option value="">-- Select Division (Optional) --</option>
+                    <option value="MISSION ROW DIVISION">MRD</option>
+                    <option value="Metropolitan Division">Metropolitan Division</option>
+                    <option value="Gang Enforcement Detail">Gang Enforcement Detail</option>
+                    <option value="Detective Bureau">Detective Bureau</option>
+                    <option value="Traffic Division">Traffic Division</option>
+                </select>
+            </div>
+            <div class="form-group" data-field="subdivision">
+                <select id="subdivision-select" disabled>
+                    <option value="">-- Select Sub-Division (Optional) --</option>
+                </select>
+            </div>
+            <div class="form-group hidden" data-field="area">
+                <select id="area-select">
+                    <option value="">-- Select Work Area (Optional) --</option>
+                    <option value="WEST VALLEY AREA">WEST VALLEY</option>
+                    <option value="VINEWOOD AREA">VINEWOOD</option>
+                    <option value="SOUTH CENTRAL AREA">SOUTH CENTRAL</option>
+                </select>
+            </div>
+            <div class="form-group" data-field="name">
+                <div class="input-group">
+                    <input type="text" id="name-input" placeholder="Name" required>
+                    <select id="font-select">
+                        <option value="Crustaceans Signature">Signature</option>
+                        <option value="Rezerv">Rezerv</option>
+                        <option value="Copperplate">Copperplate</option>
+                        <option value="Bastliga One">Bastliga One</option>
+                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
+                        <option value="Priestacy">Priestacy</option>
+                        <option value="RusticRoadway">Rustic Roadway</option>
+                        <option value="Wasted-Vindey">Wasted-Vindey</option>
+                        <option value="AutografPersonalUseOnly">Autograf</option>
+                        <option value="Theprestigesignature">Prestige</option>
+                        <option value="Autography-DOLnW">Autography-DOLnW</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" data-field="badge">
+                <div class="input-group">
+                    <input type="number" id="badge-input" placeholder="Badge Number" required>
+                    <select id="badge-font-select">
+                        <option value="Crustaceans Signature">Signature</option>
+                        <option value="Rezerv">Rezerv</option>
+                        <option value="Copperplate">Copperplate</option>
+                        <option value="Bastliga One">Bastliga One</option>
+                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
+                        <option value="Priestacy">Priestacy</option>
+                        <option value="RusticRoadway">Rustic Roadway</option>
+                        <option value="Wasted-Vindey">Wasted-Vindey</option>
+                        <option value="AutografPersonalUseOnly">Autograf</option>
+                        <option value="Theprestigesignature">Prestige</option>
+                        <option value="Autography-DOLnW">Autography-DOLnW</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="advanced-settings" class="advanced-settings-container">
+                <h2 id="advanced-settings-toggle">
+                    Advanced Settings
+                    <span class="toggle-icon">›</span>
+                </h2>
+                <div class="settings-content">
+                    <div class="setting-group labels">
+                        <label></label>
+                        <span>Size</span>
+                        <span>X Position</span>
+                        <span>Y Position</span>
+                    </div>
+                    <div class="setting-group" data-field="phone">
+                        <label>Phone:</label>
+                        <div class="slider-wrapper"><input type="range" id="phone-size" min="10" max="50" value="20"><span id="phone-size-val">20</span></div>
+                        <div class="slider-wrapper"><input type="range" id="phone-x" min="0" max="500" value="407"><span id="phone-x-val">407</span></div>
+                        <div class="slider-wrapper"><input type="range" id="phone-y" min="0" max="300" value="30"><span id="phone-y-val">30</span></div>
+                    </div>
+                    <div class="setting-group" data-field="division">
+                        <label>Division:</label>
+                        <div class="slider-wrapper"><input type="range" id="division-size" min="10" max="50" value="15"><span id="division-size-val">15</span></div>
+                        <div class="slider-wrapper"><input type="range" id="division-x" min="0" max="500" value="250"><span id="division-x-val">250</span></div>
+                        <div class="slider-wrapper"><input type="range" id="division-y" min="0" max="300" value="160"><span id="division-y-val">160</span></div>
+                    </div>
+                    <div class="setting-group hidden" data-field="area">
+                        <label>Work Area:</label>
+                        <div class="slider-wrapper"><input type="range" id="area-size" min="10" max="50" value="14"><span id="area-size-val">14</span></div>
+                        <div class="slider-wrapper"><input type="range" id="area-x" min="0" max="500" value="250"><span id="area-x-val">250</span></div>
+                        <div class="slider-wrapper"><input type="range" id="area-y" min="0" max="300" value="185"><span id="area-y-val">185</span></div>
+                    </div>
+                    <div class="setting-group" data-field="name">
+                        <label>Name:</label>
+                        <div class="slider-wrapper"><input type="range" id="name-size" min="10" max="50" value="19"><span id="name-size-val">19</span></div>
+                        <div class="slider-wrapper"><input type="range" id="name-x" min="0" max="500" value="53"><span id="name-x-val">53</span></div>
+                        <div class="slider-wrapper"><input type="range" id="name-y" min="0" max="300" value="249"><span id="name-y-val">249</span></div>
+                    </div>
+                    <div class="setting-group" data-field="badge">
+                        <label>Serial:</label>
+                        <div class="slider-wrapper"><input type="range" id="badge-size" min="10" max="50" value="19"><span id="badge-size-val">19</span></div>
+                        <div class="slider-wrapper"><input type="range" id="badge-x" min="0" max="500" value="180"><span id="badge-x-val">180</span></div>
+                        <div class="slider-wrapper"><input type="range" id="badge-y" min="0" max="300" value="249"><span id="badge-y-val">249</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="generate-btn" disabled>Generate & Download Card</button>
+        </div>
+    </div>
+
+    <div class="instructions-container">
+        <h2>How to use?</h2>
+        <ol>
+            <li>Fill out all the required fields in the generator above.</li>
+            <li>Click the "Generate & Download Card" button to save the image to your computer.</li>
+            <li>Go to a service like <a href="https://imgur.com/upload" target="_blank">Imgur</a> and upload the
+                downloaded image to get a link.</li>
+            <li>Go to any 24/7 in-game and buy notes.</li>
+            <li>Use the command: <code>/note [id of blank note] [amount] [name] LSPD Card F. Lastname</code>
+            </li>
+            <li>Use the command: <code>/note [id of new note] [amount] [content] [Your Imgur URL]</code></li>
+            <li>Use the command: <code>/giveitem</code> to give out your cards to other people.</li>
+        </ol>
+    </div>
+
+    <div id="changelog-container" class="changelog-container">
+        <h2 id="changelog-toggle">
+            Changelog
+            <span class="toggle-icon">›</span>
+        </h2>
+        <div class="changelog-content">
+            <div class="changelog-entry">
+                <h3>v1.5 - July 5, 2025</h3>
+                <ul>
+                    <li>Made "Work Area" option exclusive to the Mission Row Division (MRD).</li>
+                    <li>Removed the local "Cards Generated" counter feature.</li>
+                    <li>Added 3 new fonts.</li>
+                    <li>Updated the changelog to be a collapsible dropdown.</li>
+                </ul>
+            </div>
+            <div class="changelog-entry">
+                <h3>v1.4 - July 5, 2025</h3>
+                <ul>
+                    <li>Reordered Division, Sub-Division, and Work Area fields for better flow.</li>
+                    <li>Added dynamic sub-divisions based on the selected division.</li>
+                    <li>Combined Division and Sub-Division text onto a single line on the card.</li>
+                </ul>
+            </div>
+            <div class="changelog-entry">
+                <h3>v1.3 - July 5, 2025</h3>
+                <ul>
+                    <li>Added optional Sub-Division field.</li>
+                    <li>Added 'Advanced Settings'.</li>
+                </ul>
+            </div>
+            <div class="changelog-entry">
+                <h3>v1.2 Beta - July 4, 2025</h3>
+                <ul>
+                    <li>Initial Release.</li>
+                    <li>Bug Fixes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
