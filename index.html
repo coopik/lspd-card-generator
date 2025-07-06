@@ -6,191 +6,314 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LSPD Business Card Generator</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./images/lspd logo.png" type="image/x-icon">
+    <link rel="icon" href="./images/lspd_logo.png" type="image/x-icon">
 </head>
 
 <body>
-    <div class="container">
-        <div class="header-info">
-            <span class="version-info">v1.5</span>
-        </div>
-        <h1>LSPD Business Card Generator</h1>
-        <p>By coopik43</p>
-        <p>Inspired by PHMC's Business Card Tool</p>
-        <p>IF THE SITE ISN'T LOADING PROPERLY, HIT CTRL+SHIFT+R TO FULLY REFRESH!</p>
+    <div class="page-wrapper">
 
-        <div id="result-container"></div>
-        <canvas id="card-canvas" width="500" height="300"></canvas>
+        <main class="main-content">
+            <div class="container">
+                <div class="header-info">
+                    <span class="version-info">v2.0</span>
+                </div>
+                <img class="logo" src="./images/lspd_logo.png">
+                <h1>LSPD Business Card Generator</h1>
+                <p>By coopik43</p>
+                <p>Inspired by PHMC's Business Card Tool</p>
+                <p>IF THE SITE ISN'T LOADING PROPERLY, HIT CTRL+SHIFT+R TO FULLY REFRESH!</p>
 
-        <div class="form-controls">
-            <div class="form-group" data-field="phone">
-                <input type="number" id="phone-input" placeholder="Phone Number" required>
-            </div>
-            <div class="form-group" data-field="division">
-                <select id="division-select">
-                    <option value="">-- Select Division (Optional) --</option>
-                    <option value="MISSION ROW DIVISION">MRD</option>
-                    <option value="Metropolitan Division">Metropolitan Division</option>
-                    <option value="Gang Enforcement Detail">Gang Enforcement Detail</option>
-                    <option value="Detective Bureau">Detective Bureau</option>
-                    <option value="Traffic Division">Traffic Division</option>
-                </select>
-            </div>
-            <div class="form-group" data-field="subdivision">
-                <select id="subdivision-select" disabled>
-                    <option value="">-- Select Sub-Division (Optional) --</option>
-                </select>
-            </div>
-            <div class="form-group hidden" data-field="area">
-                <select id="area-select">
-                    <option value="">-- Select Work Area (Optional) --</option>
-                    <option value="WEST VALLEY AREA">WEST VALLEY</option>
-                    <option value="VINEWOOD AREA">VINEWOOD</option>
-                    <option value="SOUTH CENTRAL AREA">SOUTH CENTRAL</option>
-                </select>
-            </div>
-            <div class="form-group" data-field="name">
-                <div class="input-group">
-                    <input type="text" id="name-input" placeholder="Name" required>
-                    <select id="font-select">
-                        <option value="Crustaceans Signature">Signature</option>
-                        <option value="Rezerv">Rezerv</option>
-                        <option value="Copperplate">Copperplate</option>
-                        <option value="Bastliga One">Bastliga One</option>
-                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
-                        <option value="Priestacy">Priestacy</option>
-                        <option value="RusticRoadway">Rustic Roadway</option>
-                        <option value="Wasted-Vindey">Wasted-Vindey</option>
-                        <option value="AutografPersonalUseOnly">Autograf</option>
-                        <option value="Theprestigesignature">Prestige</option>
-                        <option value="Autography-DOLnW">Autography-DOLnW</option>
-                    </select>
+                <div id="result-container"></div>
+
+                <div class="generator-layout">
+                    <div class="layout-column-left">
+                        <div id="canvas-wrapper">
+                            <canvas id="card-canvas" width="500" height="300"></canvas>
+                            <canvas id="drawing-canvas" width="500" height="300"></canvas>
+                        </div>
+                        <div class="form-controls">
+                            <div class="form-group" data-field="phone">
+                                <input type="text" id="phone-input" placeholder="Phone Number" required>
+                            </div>
+                            <div class="form-group hidden" data-field="email">
+                                <input type="email" id="email-input" placeholder="Email Address">
+                            </div>
+                            <div class="form-group" data-field="division">
+                                <select id="division-select">
+                                    <option value="">-- Select Division (Optional) --</option>
+                                    <option value="MISSION ROW DIVISION">MRD</option>
+                                    <option value="Metropolitan Division">Metropolitan Division</option>
+                                    <option value="Gang Enforcement Detail">Gang Enforcement Detail</option>
+                                    <option value="Detective Bureau">Detective Bureau</option>
+                                    <option value="Traffic Division">Traffic Division</option>
+                                </select>
+                            </div>
+                            <div class="form-group" data-field="subdivision">
+                                <select id="subdivision-select" disabled>
+                                    <option value="">-- Select Sub-Division (Optional) --</option>
+                                </select>
+                            </div>
+                            <div class="form-group hidden" data-field="area">
+                                <select id="area-select">
+                                    <option value="">-- Select Work Area (Optional) --</option>
+                                    <option value="WEST VALLEY AREA">WEST VALLEY</option>
+                                    <option value="VINEWOOD AREA">VINEWOOD</option>
+                                    <option value="SOUTH CENTRAL AREA">SOUTH CENTRAL</option>
+                                </select>
+                            </div>
+                            <div class="form-group" data-field="name">
+                                <div class="input-group">
+                                    <input type="text" id="name-input" placeholder="Name" required>
+                                    <select id="font-select">
+                                        <option value="Crustaceans Signature">Signature</option>
+                                        <option value="Rezerv">Rezerv</option>
+                                        <option value="Copperplate">Copperplate</option>
+                                        <option value="Bastliga One">Bastliga One</option>
+                                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
+                                        <option value="Priestacy">Priestacy</option>
+                                        <option value="RusticRoadway">Rustic Roadway</option>
+                                        <option value="Wasted-Vindey">Wasted-Vindey</option>
+                                        <option value="AutografPersonalUseOnly">Autograf</option>
+                                        <option value="Theprestigesignature">Prestige</option>
+                                        <option value="Autography-DOLnW">Autography-DOLnW</option>
+                                        <option value="Engravers">Engravers</option>
+                                        <option value="Thryn">Thryn</option>
+                                        <option value="Substance-bold">Substance</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group hidden" data-field="rank">
+                                <input type="text" id="rank-input" placeholder="Rank">
+                            </div>
+                            <div class="form-group" data-field="badge">
+                                <div class="input-group">
+                                    <input type="number" id="badge-input" placeholder="Badge Number">
+                                    <select id="badge-font-select">
+                                        <option value="Crustaceans Signature">Signature</option>
+                                        <option value="Rezerv">Rezerv</option>
+                                        <option value="Copperplate">Copperplate</option>
+                                        <option value="Bastliga One">Bastliga One</option>
+                                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
+                                        <option value="Priestacy">Priestacy</option>
+                                        <option value="RusticRoadway">Rustic Roadway</option>
+                                        <option value="Wasted-Vindey">Wasted-Vindey</option>
+                                        <option value="AutografPersonalUseOnly">Autograf</option>
+                                        <option value="Theprestigesignature">Prestige</option>
+                                        <option value="Autography-DOLnW">Autography-DOLnW</option>
+                                        <option value="Engravers">Engravers</option>
+                                        <option value="Thryn">Thryn</option>
+                                        <option value="Substance-bold">Substance</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout-column-right">
+                        <div id="advanced-settings" class="advanced-settings-container">
+                            <h2 id="advanced-settings-toggle">
+                                Advanced Settings
+                            </h2>
+                            <div class="settings-content">
+                                <div class="setting-group labels">
+                                    <label></label>
+                                    <span>Color</span>
+                                    <span>Size</span>
+                                    <span>X</span>
+                                    <span>Y</span>
+                                    <span>Rotation</span>
+                                </div>
+                                <div class="setting-group" data-field="phone">
+                                    <label>Phone:</label>
+                                    <input type="color" data-color-for="phone" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="phone-size" min="10" max="50"
+                                            value="20"><span id="phone-size-val">20</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="phone-x" min="0" max="500"
+                                            value="407"><span id="phone-x-val">407</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="phone-y" min="0" max="300"
+                                            value="30"><span id="phone-y-val">30</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="phone-rotation" min="-180"
+                                            max="180" value="0"><span id="phone-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group hidden" data-field="email">
+                                    <label>Email:</label>
+                                    <input type="color" data-color-for="email" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="email-size" min="10" max="50"
+                                            value="15"><span id="email-size-val">15</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="email-x" min="0" max="500"
+                                            value="250"><span id="email-x-val">250</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="email-y" min="0" max="300"
+                                            value="220"><span id="email-y-val">220</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="email-rotation" min="-180"
+                                            max="180" value="0"><span id="email-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group" data-field="division">
+                                    <label>Division:</label>
+                                    <input type="color" data-color-for="division" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="division-size" min="10" max="50"
+                                            value="15"><span id="division-size-val">15</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="division-x" min="0" max="500"
+                                            value="250"><span id="division-x-val">250</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="division-y" min="0" max="300"
+                                            value="160"><span id="division-y-val">160</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="division-rotation" min="-180"
+                                            max="180" value="0"><span id="division-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group hidden" data-field="subdivision">
+                                    <label>Sub-Div:</label>
+                                    <input type="color" data-color-for="subdivision" value="#151515">
+                                    <div class="slider-wrapper"><input type="range" id="subdivision-size" min="10"
+                                            max="50" value="14"><span id="subdivision-size-val">14</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="subdivision-x" min="0" max="500"
+                                            value="309"><span id="subdivision-x-val">309</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="subdivision-y" min="0" max="300"
+                                            value="80"><span id="subdivision-y-val">80</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="subdivision-rotation" min="-180"
+                                            max="180" value="0"><span id="subdivision-rotation-val">0</span>
+                                    </div>
+                                </div>
+                                <div class="setting-group hidden" data-field="area">
+                                    <label>Work Area:</label>
+                                    <input type="color" data-color-for="area" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="area-size" min="10" max="50"
+                                            value="14"><span id="area-size-val">14</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="area-x" min="0" max="500"
+                                            value="250"><span id="area-x-val">250</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="area-y" min="0" max="300"
+                                            value="185"><span id="area-y-val">185</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="area-rotation" min="-180"
+                                            max="180" value="0"><span id="area-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group" data-field="name">
+                                    <label>Name:</label>
+                                    <input type="color" data-color-for="name" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="name-size" min="10" max="50"
+                                            value="19"><span id="name-size-val">19</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="name-x" min="0" max="500"
+                                            value="53"><span id="name-x-val">53</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="name-y" min="0" max="300"
+                                            value="249"><span id="name-y-val">249</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="name-rotation" min="-180"
+                                            max="180" value="0"><span id="name-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group hidden" data-field="rank">
+                                    <label>Rank:</label>
+                                    <input type="color" data-color-for="rank" value="#151515">
+                                    <div class="slider-wrapper"><input type="range" id="rank-size" min="10" max="50"
+                                            value="16"><span id="rank-size-val">16</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="rank-x" min="0" max="500"
+                                            value="300"><span id="rank-x-val">300</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="rank-y" min="0" max="300"
+                                            value="160"><span id="rank-y-val">160</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="rank-rotation" min="-180"
+                                            max="180" value="0"><span id="rank-rotation-val">0</span></div>
+                                </div>
+                                <div class="setting-group" data-field="badge">
+                                    <label>Serial:</label>
+                                    <input type="color" data-color-for="badge" value="#283F5B">
+                                    <div class="slider-wrapper"><input type="range" id="badge-size" min="10" max="50"
+                                            value="19"><span id="badge-size-val">19</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="badge-x" min="0" max="500"
+                                            value="180"><span id="badge-x-val">180</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="badge-y" min="0" max="300"
+                                            value="249"><span id="badge-y-val">249</span></div>
+                                    <div class="slider-wrapper"><input type="range" id="badge-rotation" min="-180"
+                                            max="180" value="0"><span id="badge-rotation-val">0</span></div>
+                                </div>
+                            </div>
+                            <div class="additional-controls">
+                                <div class="form-group" data-field="template">
+                                    <select id="template-select">
+                                        <option value="lspd_modern">LSPD - Modern</option>
+                                        <option value="lspd_db">LSPD - DB</option>
+                                        <option value="lspd_ged">LSPD - GED</option>
+                                    </select>
+                                </div>
+                                <div class="drawing-controls">
+                                    <button id="draw-mode-toggle">Enable Drawing Mode</button>
+                                    <div class="draw-options">
+                                        <label for="draw-color">Color:</label>
+                                        <input type="color" id="draw-color" value="#283F5B">
+                                        <label for="draw-width">Width:</label>
+                                        <input type="range" id="draw-width" min="1" max="15" value="2">
+                                        <button id="undo-drawing-btn" disabled>Undo</button>
+                                        <button id="clear-drawing-btn">Clear Drawing</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="generate-button-wrapper">
+                    <button id="generate-btn" disabled>Generate & Download Card</button>
                 </div>
             </div>
-            <div class="form-group" data-field="badge">
-                <div class="input-group">
-                    <input type="number" id="badge-input" placeholder="Badge Number" required>
-                    <select id="badge-font-select">
-                        <option value="Crustaceans Signature">Signature</option>
-                        <option value="Rezerv">Rezerv</option>
-                        <option value="Copperplate">Copperplate</option>
-                        <option value="Bastliga One">Bastliga One</option>
-                        <option value="PerfectoCalligraphy">Perfecto Calligraphy</option>
-                        <option value="Priestacy">Priestacy</option>
-                        <option value="RusticRoadway">Rustic Roadway</option>
-                        <option value="Wasted-Vindey">Wasted-Vindey</option>
-                        <option value="AutografPersonalUseOnly">Autograf</option>
-                        <option value="Theprestigesignature">Prestige</option>
-                        <option value="Autography-DOLnW">Autography-DOLnW</option>
-                    </select>
-                </div>
+
+            <div class="instructions-container">
+                <h2>How to use?</h2>
+                <ol>
+                    <li>Fill out all the required fields in the generator above.</li>
+                    <li>Click <b>"Enable Drawing Mode"</b> to use your mouse as a pen. You can change the color and
+                        width.</li>
+                    <li>Draw your signature or other details directly on the card. Use the <b>"Undo"</b> button to fix
+                        mistakes.</li>
+                    <li>When ready, click the <b>Generate & Download Card</b> button to save the image to your computer.
+                    </li>
+                    <li>Upload to an image host like <a href="https://imgur.com/upload" target="_blank">Imgur</a> and
+                        use
+                        in-game.</li>
+                    <li>Go to any 24/7 in-game and buy notes.</li>
+                    <li>Use the command: <code>/note [id of blank note] [amount] [name] LSPD Card F. Lastname</code>
+                    </li>
+                    <li>Use the command: <code>/note [id of new note] [amount] [content] [Your Imgur URL]</code></li>
+                    <li>Use the command: <code>/giveitem to give out your cards to other people.</code></li>
+                </ol>
             </div>
 
-            <div id="advanced-settings" class="advanced-settings-container">
-                <h2 id="advanced-settings-toggle">
-                    Advanced Settings
+            <div id="changelog-container" class="changelog-container">
+                <h2 id="changelog-toggle">
+                    Changelog
                     <span class="toggle-icon">›</span>
                 </h2>
-                <div class="settings-content">
-                    <div class="setting-group labels">
-                        <label></label>
-                        <span>Size</span>
-                        <span>X Position</span>
-                        <span>Y Position</span>
-                    </div>
-                    <div class="setting-group" data-field="phone">
-                        <label>Phone:</label>
-                        <div class="slider-wrapper"><input type="range" id="phone-size" min="10" max="50" value="20"><span id="phone-size-val">20</span></div>
-                        <div class="slider-wrapper"><input type="range" id="phone-x" min="0" max="500" value="407"><span id="phone-x-val">407</span></div>
-                        <div class="slider-wrapper"><input type="range" id="phone-y" min="0" max="300" value="30"><span id="phone-y-val">30</span></div>
-                    </div>
-                    <div class="setting-group" data-field="division">
-                        <label>Division:</label>
-                        <div class="slider-wrapper"><input type="range" id="division-size" min="10" max="50" value="15"><span id="division-size-val">15</span></div>
-                        <div class="slider-wrapper"><input type="range" id="division-x" min="0" max="500" value="250"><span id="division-x-val">250</span></div>
-                        <div class="slider-wrapper"><input type="range" id="division-y" min="0" max="300" value="160"><span id="division-y-val">160</span></div>
-                    </div>
-                    <div class="setting-group hidden" data-field="area">
-                        <label>Work Area:</label>
-                        <div class="slider-wrapper"><input type="range" id="area-size" min="10" max="50" value="14"><span id="area-size-val">14</span></div>
-                        <div class="slider-wrapper"><input type="range" id="area-x" min="0" max="500" value="250"><span id="area-x-val">250</span></div>
-                        <div class="slider-wrapper"><input type="range" id="area-y" min="0" max="300" value="185"><span id="area-y-val">185</span></div>
-                    </div>
-                    <div class="setting-group" data-field="name">
-                        <label>Name:</label>
-                        <div class="slider-wrapper"><input type="range" id="name-size" min="10" max="50" value="19"><span id="name-size-val">19</span></div>
-                        <div class="slider-wrapper"><input type="range" id="name-x" min="0" max="500" value="53"><span id="name-x-val">53</span></div>
-                        <div class="slider-wrapper"><input type="range" id="name-y" min="0" max="300" value="249"><span id="name-y-val">249</span></div>
-                    </div>
-                    <div class="setting-group" data-field="badge">
-                        <label>Serial:</label>
-                        <div class="slider-wrapper"><input type="range" id="badge-size" min="10" max="50" value="19"><span id="badge-size-val">19</span></div>
-                        <div class="slider-wrapper"><input type="range" id="badge-x" min="0" max="500" value="180"><span id="badge-x-val">180</span></div>
-                        <div class="slider-wrapper"><input type="range" id="badge-y" min="0" max="300" value="249"><span id="badge-y-val">249</span></div>
+                <div class="changelog-content">
+                    <div class="changelog-entry">
+                        <h3>v2.0 - July 7, 2025</h3>
+                        <ul>
+                            <li>Added a "Rank" field, exclusive to the LSPD-DB template.</li>
+                            <li>Reworked the frontend again.</li>
+                            <li>Implemented a feature to switch between different templates.</li>
+                            <li>Added two new templates for GED and DB (more coming soon).</li>
+                            <li>Added two new fonts.</li>
+                            <li>Updated "Advanced Settings" and added an option to rotate text.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </main>
 
-            <button id="generate-btn" disabled>Generate & Download Card</button>
-        </div>
+        <aside id="history-sidebar" class="history-sidebar">
+            <div class="history-header">
+                <h2>History</h2>
+                <button id="clear-history-btn">Clear</button>
+            </div>
+            <div class="history-body">
+                <p>Your 10 most recent cards are saved. Click a card to load it.</p>
+                <div id="history-items-wrapper">
+                </div>
+            </div>
+        </aside>
     </div>
 
-    <div class="instructions-container">
-        <h2>How to use?</h2>
-        <ol>
-            <li>Fill out all the required fields in the generator above.</li>
-            <li>Click the "Generate & Download Card" button to save the image to your computer.</li>
-            <li>Go to a service like <a href="https://imgur.com/upload" target="_blank">Imgur</a> and upload the
-                downloaded image to get a link.</li>
-            <li>Go to any 24/7 in-game and buy notes.</li>
-            <li>Use the command: <code>/note [id of blank note] [amount] [name] LSPD Card F. Lastname</code>
-            </li>
-            <li>Use the command: <code>/note [id of new note] [amount] [content] [Your Imgur URL]</code></li>
-            <li>Use the command: <code>/giveitem</code> to give out your cards to other people.</li>
-        </ol>
-    </div>
+    <button id="history-toggle-btn" class="history-toggle-btn" title="Toggle History">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 4v6h6" />
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+        </svg>
+    </button>
 
-    <div id="changelog-container" class="changelog-container">
-        <h2 id="changelog-toggle">
-            Changelog
-            <span class="toggle-icon">›</span>
-        </h2>
-        <div class="changelog-content">
-            <div class="changelog-entry">
-                <h3>v1.5 - July 5, 2025</h3>
-                <ul>
-                    <li>Made "Work Area" option exclusive to the Mission Row Division (MRD).</li>
-                    <li>Removed the local "Cards Generated" counter feature.</li>
-                    <li>Added 3 new fonts.</li>
-                    <li>Updated the changelog to be a collapsible dropdown.</li>
-                </ul>
-            </div>
-            <div class="changelog-entry">
-                <h3>v1.4 - July 5, 2025</h3>
-                <ul>
-                    <li>Reordered Division, Sub-Division, and Work Area fields for better flow.</li>
-                    <li>Added dynamic sub-divisions based on the selected division.</li>
-                    <li>Combined Division and Sub-Division text onto a single line on the card.</li>
-                </ul>
-            </div>
-            <div class="changelog-entry">
-                <h3>v1.3 - July 5, 2025</h3>
-                <ul>
-                    <li>Added optional Sub-Division field.</li>
-                    <li>Added 'Advanced Settings'.</li>
-                </ul>
-            </div>
-            <div class="changelog-entry">
-                <h3>v1.2 Beta - July 4, 2025</h3>
-                <ul>
-                    <li>Initial Release.</li>
-                    <li>Bug Fixes.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
