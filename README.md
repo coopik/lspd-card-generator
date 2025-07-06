@@ -1,1 +1,1 @@
-"# lspd-card-generator" 
+LSPD Business Card Generator by coopik43
