@@ -78,17 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const templateSelect = document.getElementById('template-select');
         const phoneInput = document.getElementById('phone-input'),
-            emailInput = document.getElementById('email-input'),
-            rankInput = document.getElementById('rank-input'),
-            areaSelect = document.getElementById('area-select'),
-            subdivisionSelect = document.getElementById('subdivision-select'),
-            divisionSelect = document.getElementById('division-select'),
-            badgeInput = document.getElementById('badge-input'),
-            nameInput = document.getElementById('name-input'),
-            generateBtn = document.getElementById('generate-btn'),
-            fontSelect = document.getElementById('font-select'),
-            badgeFontSelect = document.getElementById('badge-font-select'),
-            resultContainer = document.getElementById('result-container');
+              emailInput = document.getElementById('email-input'),
+              rankInput = document.getElementById('rank-input'),
+              areaSelect = document.getElementById('area-select'),
+              subdivisionSelect = document.getElementById('subdivision-select'),
+              divisionSelect = document.getElementById('division-select'),
+              badgeInput = document.getElementById('badge-input'),
+              nameInput = document.getElementById('name-input'),
+              generateBtn = document.getElementById('generate-btn'),
+              fontSelect = document.getElementById('font-select'),
+              badgeFontSelect = document.getElementById('badge-font-select'),
+              resultContainer = document.getElementById('result-container');
 
         const drawModeToggle = document.getElementById('draw-mode-toggle');
         const drawColorInput = document.getElementById('draw-color');
@@ -100,9 +100,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const historyToggleBtn = document.getElementById('history-toggle-btn');
         const historyItemsWrapper = document.getElementById('history-items-wrapper');
         const clearHistoryBtn = document.getElementById('clear-history-btn');
+        
+        const changelogContainer = document.getElementById('changelog-container');
+        const changelogToggle = document.getElementById('changelog-toggle');
 
         const areaFormGroup = document.querySelector('.form-group[data-field="area"]');
         const areaSettingGroup = document.querySelector('.setting-group[data-field="area"]');
+        
+        const resetSettingsBtn = document.getElementById('reset-settings-btn');
+        const logoUploadInput = document.getElementById('logo-upload-input');
+        const clearLogoBtn = document.getElementById('clear-logo-btn');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        const shadowToggle = document.getElementById('shadow-toggle');
+        const shadowColor = document.getElementById('shadow-color');
+        const shadowXSlider = document.getElementById('shadow-x'), shadowXVal = document.getElementById('shadow-x-val');
+        const shadowYSlider = document.getElementById('shadow-y'), shadowYVal = document.getElementById('shadow-y-val');
+        const shadowBlurSlider = document.getElementById('shadow-blur'), shadowBlurVal = document.getElementById('shadow-blur-val');
+        
+        const strokeToggle = document.getElementById('stroke-toggle');
+        const strokeColor = document.getElementById('stroke-color');
+        const strokeWidthSlider = document.getElementById('stroke-width'), strokeWidthVal = document.getElementById('stroke-width-val');
+
+        const textOpacitySlider = document.getElementById('text-opacity'), textOpacityVal = document.getElementById('text-opacity-val');
+        const letterSpacingSlider = document.getElementById('letter-spacing'), letterSpacingVal = document.getElementById('letter-spacing-val');
+        const caseTransformButtons = document.querySelectorAll('.case-btn');
 
         const sliders = {
             phone: { size: document.getElementById('phone-size'), x: document.getElementById('phone-x'), y: document.getElementById('phone-y'), rotation: document.getElementById('phone-rotation') },
@@ -112,7 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
             subdivision: { size: document.getElementById('subdivision-size'), x: document.getElementById('subdivision-x'), y: document.getElementById('subdivision-y'), rotation: document.getElementById('subdivision-rotation') },
             badge: { size: document.getElementById('badge-size'), x: document.getElementById('badge-x'), y: document.getElementById('badge-y'), rotation: document.getElementById('badge-rotation') },
             name: { size: document.getElementById('name-size'), x: document.getElementById('name-x'), y: document.getElementById('name-y'), rotation: document.getElementById('name-rotation') },
-            rank: { size: document.getElementById('rank-size'), x: document.getElementById('rank-x'), y: document.getElementById('rank-y'), rotation: document.getElementById('rank-rotation') }
+            rank: { size: document.getElementById('rank-size'), x: document.getElementById('rank-x'), y: document.getElementById('rank-y'), rotation: document.getElementById('rank-rotation') },
+            logo: { size: document.getElementById('logo-size'), x: document.getElementById('logo-x'), y: document.getElementById('logo-y'), rotation: document.getElementById('logo-rotation') }
         };
         const valueDisplays = {
             phone: { size: document.getElementById('phone-size-val'), x: document.getElementById('phone-x-val'), y: document.getElementById('phone-y-val'), rotation: document.getElementById('phone-rotation-val') },
@@ -122,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             subdivision: { size: document.getElementById('subdivision-size-val'), x: document.getElementById('subdivision-x-val'), y: document.getElementById('subdivision-y-val'), rotation: document.getElementById('subdivision-rotation-val') },
             badge: { size: document.getElementById('badge-size-val'), x: document.getElementById('badge-x-val'), y: document.getElementById('badge-y-val'), rotation: document.getElementById('badge-rotation-val') },
             name: { size: document.getElementById('name-size-val'), x: document.getElementById('name-x-val'), y: document.getElementById('name-y-val'), rotation: document.getElementById('name-rotation-val') },
-            rank: { size: document.getElementById('rank-size-val'), x: document.getElementById('rank-x-val'), y: document.getElementById('rank-y-val'), rotation: document.getElementById('rank-rotation-val') }
+            rank: { size: document.getElementById('rank-size-val'), x: document.getElementById('rank-x-val'), y: document.getElementById('rank-y-val'), rotation: document.getElementById('rank-rotation-val') },
+            logo: { size: document.getElementById('logo-size-val'), x: document.getElementById('logo-x-val'), y: document.getElementById('logo-y-val'), rotation: document.getElementById('logo-rotation-val') }
         };
         const colorPickers = {
             phone: document.querySelector('[data-color-for="phone"]'),
@@ -137,28 +161,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const templateImage = new Image();
         templateImage.crossOrigin = "Anonymous";
-        const advancedSettings = document.getElementById('advanced-settings');
-        const toggleButton = document.getElementById('advanced-settings-toggle');
-        toggleButton.addEventListener('click', () => advancedSettings.classList.toggle('open'));
 
-        const changelogContainer = document.getElementById('changelog-container');
-        const changelogToggle = document.getElementById('changelog-toggle');
         if (changelogToggle) {
             changelogToggle.addEventListener('click', () => changelogContainer.classList.toggle('open'));
         }
-
+        
         if (historyToggleBtn) {
             historyToggleBtn.addEventListener('click', () => {
                 historySidebar.classList.toggle('open');
             });
         }
-
+        
+        let uploadedLogo = null;
         let isDrawing = false;
         let drawModeEnabled = false;
         let lastX = 0;
         let lastY = 0;
         let drawHistory = [];
         let requiredInputs = [];
+        let textCaseTransform = 'default';
 
         function updateUIForTemplate(templateId) {
             const config = templateConfigs[templateId];
@@ -168,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.querySelectorAll('.form-group, .setting-group').forEach(group => {
                 const fieldName = group.getAttribute('data-field');
-                if (fieldName && fieldName !== 'template') {
+                if (fieldName && !['template', 'logo', 'shadow', 'stroke', 'globals'].includes(fieldName)) {
                     const shouldBeVisible = config.fields.includes(fieldName);
                     group.classList.toggle('hidden', !shouldBeVisible);
                 }
@@ -296,29 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
             saveDrawState();
         };
 
-        drawingCanvas.addEventListener('mousedown', startDrawing);
-        drawingCanvas.addEventListener('mousemove', drawOnCanvas);
-        drawingCanvas.addEventListener('mouseup', endDrawing);
-        drawingCanvas.addEventListener('mouseleave', endDrawing);
-        drawingCanvas.addEventListener('touchstart', startDrawing, { passive: false });
-        drawingCanvas.addEventListener('touchmove', drawOnCanvas, { passive: false });
-        drawingCanvas.addEventListener('touchend', endDrawing);
-
-        drawModeToggle.addEventListener('click', () => {
-            drawModeEnabled = !drawModeEnabled;
-            drawModeToggle.textContent = drawModeEnabled ? 'Disable Drawing Mode' : 'Enable Drawing Mode';
-            drawModeToggle.classList.toggle('active', drawModeEnabled);
-            drawingCanvas.classList.toggle('draw-mode-active', drawModeEnabled);
-        });
-
-        clearDrawingBtn.addEventListener('click', () => {
-            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-            drawHistory = [];
-            saveDrawState();
-        });
-
-        undoBtn.addEventListener('click', undoLastDraw);
-
         function loadHistory() {
             return JSON.parse(localStorage.getItem('cardHistory') || '[]');
         }
@@ -398,6 +396,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         colorPickers[field].value = entry.colors[field];
                     }
                 }
+                
+                if (entry.logo) {
+                    uploadedLogo = new Image();
+                    uploadedLogo.src = entry.logo;
+                    uploadedLogo.onload = () => {
+                        drawCard();
+                    };
+                } else {
+                    uploadedLogo = null;
+                }
 
                 drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
                 if (entry.drawing) {
@@ -418,25 +426,38 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        clearHistoryBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear your entire card history? This cannot be undone.')) {
-                localStorage.removeItem('cardHistory');
-                renderHistory();
-            }
-        });
-
         function drawCard() {
             if (!templateImage.complete || templateImage.naturalHeight === 0) return;
             mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
             mainCtx.drawImage(templateImage, 0, 0, mainCanvas.width, mainCanvas.height);
 
-            const config = templateConfigs[templateSelect.value];
+            if (uploadedLogo) {
+                mainCtx.save();
+                const x = parseInt(sliders.logo.x.value, 10);
+                const y = parseInt(sliders.logo.y.value, 10);
+                const size = parseInt(sliders.logo.size.value, 10);
+                const rotation = parseInt(sliders.logo.rotation.value, 10) * Math.PI / 180;
+                mainCtx.translate(x, y);
+                mainCtx.rotate(rotation);
+                mainCtx.drawImage(uploadedLogo, -size / 2, -size / 2, size, size);
+                mainCtx.restore();
+            }
 
+            const config = templateConfigs[templateSelect.value];
+            
+            mainCtx.globalAlpha = parseFloat(textOpacitySlider.value);
+            mainCtx.letterSpacing = `${letterSpacingSlider.value}px`;
+
+            if (shadowToggle.checked) {
+                mainCtx.shadowColor = shadowColor.value;
+                mainCtx.shadowOffsetX = parseInt(shadowXSlider.value, 10);
+                mainCtx.shadowOffsetY = parseInt(shadowYSlider.value, 10);
+                mainCtx.shadowBlur = parseInt(shadowBlurSlider.value, 10);
+            }
+            
             config.fields.forEach(field => {
                 if (!config.settings[field] || !sliders[field]) return;
-
                 let textToDraw = '';
-
                 switch (field) {
                     case 'phone': textToDraw = phoneInput.value; break;
                     case 'email': textToDraw = emailInput.value; break;
@@ -463,30 +484,43 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                 }
 
+                if (textCaseTransform === 'uppercase') {
+                    textToDraw = textToDraw.toUpperCase();
+                } else if (textCaseTransform === 'lowercase') {
+                    textToDraw = textToDraw.toLowerCase();
+                }
+
                 if (textToDraw) {
                     let font = config.settings[field].font || 'sans-serif';
                     if (field === 'name') font = fontSelect.value;
                     if (field === 'badge') font = badgeFontSelect.value;
-
                     mainCtx.save();
-
                     const x = parseInt(sliders[field].x.value, 10);
                     const y = parseInt(sliders[field].y.value, 10);
                     const rotation = parseInt(sliders[field].rotation.value, 10);
                     const rotationInRadians = rotation * Math.PI / 180;
-
                     mainCtx.fillStyle = colorPickers[field].value;
                     mainCtx.font = `${sliders[field].size.value}px '${font}'`;
                     mainCtx.textAlign = config.settings[field].align || 'left';
-
                     mainCtx.translate(x, y);
                     mainCtx.rotate(rotationInRadians);
-
+                    
+                    if (strokeToggle.checked) {
+                        mainCtx.strokeStyle = strokeColor.value;
+                        mainCtx.lineWidth = parseInt(strokeWidthSlider.value, 10);
+                        mainCtx.strokeText(textToDraw, 0, 0);
+                    }
                     mainCtx.fillText(textToDraw, 0, 0);
-
                     mainCtx.restore();
                 }
             });
+            
+            mainCtx.globalAlpha = 1.0;
+            mainCtx.letterSpacing = '0px';
+            mainCtx.shadowColor = 'transparent';
+            mainCtx.shadowOffsetX = 0;
+            mainCtx.shadowOffsetY = 0;
+            mainCtx.shadowBlur = 0;
         }
 
         const validateForm = () => {
@@ -508,13 +542,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 areaSelect.value = '';
             }
         }
-
+        
+        drawingCanvas.addEventListener('mousedown', startDrawing);
+        drawingCanvas.addEventListener('mousemove', drawOnCanvas);
+        drawingCanvas.addEventListener('mouseup', endDrawing);
+        drawingCanvas.addEventListener('mouseleave', endDrawing);
+        drawingCanvas.addEventListener('touchstart', startDrawing, { passive: false });
+        drawingCanvas.addEventListener('touchmove', drawOnCanvas, { passive: false });
+        drawingCanvas.addEventListener('touchend', endDrawing);
+        drawModeToggle.addEventListener('click', () => {
+            drawModeEnabled = !drawModeEnabled;
+            drawModeToggle.textContent = drawModeEnabled ? 'Disable Drawing Mode' : 'Enable Drawing Mode';
+            drawModeToggle.classList.toggle('active', drawModeEnabled);
+            drawingCanvas.classList.toggle('draw-mode-active', drawModeEnabled);
+        });
+        clearDrawingBtn.addEventListener('click', () => {
+            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+            drawHistory = [];
+            saveDrawState();
+        });
+        undoBtn.addEventListener('click', undoLastDraw);
+        clearHistoryBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear your entire card history? This cannot be undone.')) {
+                localStorage.removeItem('cardHistory');
+                renderHistory();
+            }
+        });
         templateImage.onload = () => drawCard();
         templateImage.onerror = () => {
             console.error("Failed to load template image:", templateImage.src);
             mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
         };
-
         for (const group in sliders) {
             for (const prop in sliders[group]) {
                 const slider = sliders[group][prop];
@@ -532,25 +590,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 colorPickers[field].addEventListener('input', drawCard);
             }
         }
-
         divisionSelect.addEventListener('input', () => {
             toggleWorkAreaVisibility();
             updateSubDivisionDropdown();
             drawCard();
             validateForm();
         });
-
         templateSelect.addEventListener('input', () => {
             updateUIForTemplate(templateSelect.value);
         });
-
         [phoneInput, emailInput, areaSelect, subdivisionSelect, badgeInput, nameInput, rankInput, fontSelect, badgeFontSelect].forEach(element => {
             element.addEventListener('input', () => {
                 drawCard();
                 validateForm();
             });
         });
-
         generateBtn.addEventListener('click', () => {
             const config = templateConfigs[templateSelect.value];
             const tempCanvas = document.createElement('canvas');
@@ -559,63 +613,100 @@ document.addEventListener('DOMContentLoaded', () => {
             const tempCtx = tempCanvas.getContext('2d');
             tempCtx.drawImage(mainCanvas, 0, 0);
             tempCtx.drawImage(drawingCanvas, 0, 0);
-
             const thumbnailCanvas = document.createElement('canvas');
             thumbnailCanvas.width = 150;
             thumbnailCanvas.height = 90;
             thumbnailCanvas.getContext('2d').drawImage(tempCanvas, 0, 0, 150, 90);
-
             const newEntry = {
                 template: templateSelect.value,
                 timestamp: new Date().getTime(),
                 thumbnail: thumbnailCanvas.toDataURL(),
-                values: {
-                    phone: phoneInput.value,
-                    email: emailInput.value,
-                    division: divisionSelect.value,
-                    subdivision: subdivisionSelect.value,
-                    area: areaSelect.value,
-                    name: nameInput.value,
-                    badge: badgeInput.value,
-                    rank: rankInput.value
-                },
-                fonts: {
-                    name: fontSelect.value,
-                    badge: badgeFontSelect.value,
-                },
-                styles: {
-                    phone: { size: sliders.phone.size.value, x: sliders.phone.x.value, y: sliders.phone.y.value, rotation: sliders.phone.rotation.value },
-                    email: { size: sliders.email.size.value, x: sliders.email.x.value, y: sliders.email.y.value, rotation: sliders.email.rotation.value },
-                    division: { size: sliders.division.size.value, x: sliders.division.x.value, y: sliders.division.y.value, rotation: sliders.division.rotation.value },
-                    subdivision: { size: sliders.subdivision.size.value, x: sliders.subdivision.x.value, y: sliders.subdivision.y.value, rotation: sliders.subdivision.rotation.value },
-                    area: { size: sliders.area.size.value, x: sliders.area.x.value, y: sliders.area.y.value, rotation: sliders.area.rotation.value },
-                    name: { size: sliders.name.size.value, x: sliders.name.x.value, y: sliders.name.y.value, rotation: sliders.name.rotation.value },
-                    badge: { size: sliders.badge.size.value, x: sliders.badge.x.value, y: sliders.badge.y.value, rotation: sliders.badge.rotation.value },
-                    rank: { size: sliders.rank.size.value, x: sliders.rank.x.value, y: sliders.rank.y.value, rotation: sliders.rank.rotation.value }
-                },
-                colors: {
-                    phone: colorPickers.phone.value,
-                    email: colorPickers.email.value,
-                    division: colorPickers.division.value,
-                    subdivision: colorPickers.subdivision.value,
-                    area: colorPickers.area.value,
-                    name: colorPickers.name.value,
-                    badge: colorPickers.badge.value,
-                    rank: colorPickers.rank.value
-                },
+                logo: uploadedLogo ? uploadedLogo.src : null,
+                values: { phone: phoneInput.value, email: emailInput.value, division: divisionSelect.value, subdivision: subdivisionSelect.value, area: areaSelect.value, name: nameInput.value, badge: badgeInput.value, rank: rankInput.value },
+                fonts: { name: fontSelect.value, badge: badgeFontSelect.value },
+                styles: { phone: { size: sliders.phone.size.value, x: sliders.phone.x.value, y: sliders.phone.y.value, rotation: sliders.phone.rotation.value }, email: { size: sliders.email.size.value, x: sliders.email.x.value, y: sliders.email.y.value, rotation: sliders.email.rotation.value }, division: { size: sliders.division.size.value, x: sliders.division.x.value, y: sliders.division.y.value, rotation: sliders.division.rotation.value }, subdivision: { size: sliders.subdivision.size.value, x: sliders.subdivision.x.value, y: sliders.subdivision.y.value, rotation: sliders.subdivision.rotation.value }, area: { size: sliders.area.size.value, x: sliders.area.x.value, y: sliders.area.y.value, rotation: sliders.area.rotation.value }, name: { size: sliders.name.size.value, x: sliders.name.x.value, y: sliders.name.y.value, rotation: sliders.name.rotation.value }, badge: { size: sliders.badge.size.value, x: sliders.badge.x.value, y: sliders.badge.y.value, rotation: sliders.badge.rotation.value }, rank: { size: sliders.rank.size.value, x: sliders.rank.x.value, y: sliders.rank.y.value, rotation: sliders.rank.rotation.value }, logo: { size: sliders.logo.size.value, x: sliders.logo.x.value, y: sliders.logo.y.value, rotation: sliders.logo.rotation.value } },
+                colors: { phone: colorPickers.phone.value, email: colorPickers.email.value, division: colorPickers.division.value, subdivision: colorPickers.subdivision.value, area: colorPickers.area.value, name: colorPickers.name.value, badge: colorPickers.badge.value, rank: colorPickers.rank.value },
                 drawing: drawingCanvas.toDataURL()
             };
-
             const history = loadHistory();
             history.push(newEntry);
             saveHistory(history);
             renderHistory();
-
             const link = document.createElement('a');
             link.download = config.fileName;
             link.href = tempCanvas.toDataURL('image/png');
             link.click();
             resultContainer.textContent = 'Card downloaded & Saved to history.';
+        });
+        resetSettingsBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all settings to their defaults?')) {
+                phoneInput.value = '';
+                emailInput.value = '';
+                rankInput.value = '';
+                divisionSelect.value = '';
+                updateSubDivisionDropdown();
+                areaSelect.value = '';
+                nameInput.value = '';
+                badgeInput.value = '';
+                updateUIForTemplate(templateSelect.value);
+                clearLogoBtn.click();
+                shadowToggle.checked = false;
+                strokeToggle.checked = false;
+                textOpacitySlider.value = 1;
+                letterSpacingSlider.value = 0;
+                textCaseTransform = 'default';
+                caseTransformButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.case === 'default'));
+                drawCard();
+                validateForm();
+            }
+        });
+        logoUploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileNameDisplay.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    uploadedLogo = new Image();
+                    uploadedLogo.src = event.target.result;
+                    uploadedLogo.onload = () => drawCard();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        clearLogoBtn.addEventListener('click', () => {
+            uploadedLogo = null;
+            logoUploadInput.value = '';
+            fileNameDisplay.textContent = 'No file chosen';
+            drawCard();
+        });
+        [shadowToggle, shadowColor, shadowXSlider, shadowYSlider, shadowBlurSlider].forEach(el => {
+            el.addEventListener('input', () => {
+                shadowXVal.textContent = shadowXSlider.value;
+                shadowYVal.textContent = shadowYSlider.value;
+                shadowBlurVal.textContent = shadowBlurSlider.value;
+                drawCard();
+            });
+        });
+        [strokeToggle, strokeColor, strokeWidthSlider].forEach(el => {
+            el.addEventListener('input', () => {
+                strokeWidthVal.textContent = strokeWidthSlider.value;
+                drawCard();
+            });
+        });
+        [textOpacitySlider, letterSpacingSlider].forEach(el => {
+            el.addEventListener('input', () => {
+                textOpacityVal.textContent = textOpacitySlider.value;
+                letterSpacingVal.textContent = letterSpacingSlider.value;
+                drawCard();
+            });
+        });
+        caseTransformButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                caseTransformButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                textCaseTransform = btn.dataset.case;
+                drawCard();
+            });
         });
 
         updateUIForTemplate(templateSelect.value);
